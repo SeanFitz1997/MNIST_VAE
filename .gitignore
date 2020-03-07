@@ -1,0 +1,7 @@
+__pycache__
+
+training_images/*
+!training_images/.gitkeep
+
+training_checkpoints/*
+!training_checkpoints/.gitkeep

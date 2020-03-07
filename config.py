@@ -1,0 +1,2 @@
+NTH_SAVE = 10
+GPU = None
