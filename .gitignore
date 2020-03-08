@@ -5,3 +5,6 @@ training_images/*
 
 training_checkpoints/*
 !training_checkpoints/.gitkeep
+
+.*
+!.git*

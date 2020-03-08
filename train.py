@@ -2,6 +2,7 @@ import os
 import time
 import tensorflow as tf
 import matplotlib.pyplot as plt
+from progress.bar import Bar
 from vae import (VAE, log_normal_pdf,
                  compute_loss, train_step)
 from config import NTH_SAVE, GPU
@@ -28,6 +29,7 @@ test_images[test_images < .5] = 0.
 TRAIN_BUFFER = len(train_images)
 TEST_BUFFER = len(test_images)
 BATCH_SIZE = 100
+BUFFER_SIZE = len(train_images)
 
 # Batch and Shuffle the data
 train_dataset = tf.data.Dataset.from_tensor_slices(
@@ -76,12 +78,11 @@ def train(train_dataset, test_dataset, epochs):
     for epoch in range(1, epochs + 1):
         start_time = time.time()
 
-        for i, image_batch in enumerate(train_dataset, 1):
-            train_step(model, image_batch, optimizer)
-
-            if i % 10 == 0:
-                print('Completed Batch {}/{}'.format(i, number_of_batches))
-            i += 1
+        num_batches = int(BUFFER_SIZE / BATCH_SIZE)
+        with Bar('Epoch {}'.format(epoch), max=num_batches) as bar: 
+            for image_batch in train_dataset:
+                train_step(model, image_batch, optimizer)
+                bar.next()
 
         end_time = time.time()
 
